@@ -22,6 +22,7 @@ import {
   DoneIcon,
   EmbedIcon,
   CollapseIcon,
+  ShapesIcon,
 } from "outline-icons";
 import * as React from "react";
 import styled from "styled-components";
@@ -164,6 +165,24 @@ export default function blockMenuItems(
       title: t("Math block (LaTeX)"),
       icon: <MathIcon />,
       keywords: "math katex latex",
+    },
+    {
+      name: "excalidraw",
+      title: "Excalidraw",
+      icon: <ShapesIcon />,
+      keywords: "diagram drawing whiteboard sketch",
+    },
+    {
+      name: "mindmap",
+      title: "Mindmap",
+      icon: <ShapesIcon />,
+      keywords: "markmap mindmap mind map brainstorm outline tree",
+    },
+    {
+      name: "container_toggle",
+      title: t("Toggle block"),
+      icon: <CollapseIcon />,
+      keywords: "toggle collapsible collapse fold",
     },
     {
       name: "hr",

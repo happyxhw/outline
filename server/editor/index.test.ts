@@ -145,3 +145,55 @@ test("serializes uppercase alpha lists back to markdown", () => {
 
   expect(output.trim()).toBe("A. First item\nB. Second item");
 });
+
+test("parses excalidraw blocks", () => {
+  const data = JSON.stringify({
+    type: "excalidraw",
+    elements: [],
+  });
+  const ast = parser.parse("```excalidraw\n" + data + "\n```");
+
+  expect(ast?.toJSON()).toEqual({
+    content: [
+      {
+        attrs: { data, height: null },
+        type: "excalidraw",
+      },
+    ],
+    type: "doc",
+  });
+});
+
+test("serializes excalidraw blocks back to markdown", () => {
+  const data = JSON.stringify({
+    type: "excalidraw",
+    elements: [],
+  });
+  const ast = parser.parse("```excalidraw\n" + data + "\n```");
+  const output = serializer.serialize(ast);
+
+  expect(output.trim()).toBe("```excalidraw\n" + data + "\n```");
+});
+
+test("parses mindmap blocks", () => {
+  const data = "# Mindmap\n\n- Topic\n  - Idea";
+  const ast = parser.parse("```mindmap\n" + data + "\n```");
+
+  expect(ast?.toJSON()).toEqual({
+    content: [
+      {
+        attrs: { data, height: null },
+        type: "mindmap",
+      },
+    ],
+    type: "doc",
+  });
+});
+
+test("serializes mindmap blocks back to markdown", () => {
+  const data = "# Mindmap\n\n- Topic\n  - Idea";
+  const ast = parser.parse("```mindmap\n" + data + "\n```");
+  const output = serializer.serialize(ast);
+
+  expect(output.trim()).toBe("```mindmap\n" + data + "\n```");
+});
