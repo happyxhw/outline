@@ -23,6 +23,7 @@ import {
   DoneIcon,
   EmbedIcon,
   CollapseIcon,
+  ShapesIcon,
 } from "outline-icons";
 import * as React from "react";
 import styled from "styled-components";
@@ -164,6 +165,18 @@ export default function blockMenuItems(
       title: dictionary.mathBlock,
       icon: <MathIcon />,
       keywords: "math katex latex",
+    },
+    {
+      name: "excalidraw",
+      title: "Excalidraw",
+      icon: <ShapesIcon />,
+      keywords: "diagram drawing whiteboard sketch",
+    },
+    {
+      name: "mindmap",
+      title: "Mindmap",
+      icon: <ShapesIcon />,
+      keywords: "markmap mindmap mind map brainstorm outline tree",
     },
     {
       name: "container_toggle",

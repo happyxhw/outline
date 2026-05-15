@@ -49,6 +49,7 @@ export default function createCSPMiddleware(options?: CSPOptions) {
   const defaultSrc: string[] = ["'self'"];
   const scriptSrc: string[] = [];
   const styleSrc: string[] = ["'self'", "'unsafe-inline'"];
+  const fontSrc: string[] = ["'self'", "data:", "https://esm.sh"];
   const objectSrc: string[] = [env.URL, "'self'"];
 
   if (env.isCloudHosted) {
@@ -73,6 +74,7 @@ export default function createCSPMiddleware(options?: CSPOptions) {
   if (env.CDN_URL) {
     scriptSrc.push(env.CDN_URL);
     styleSrc.push(env.CDN_URL);
+    fontSrc.push(env.CDN_URL);
     defaultSrc.push(env.CDN_URL);
   }
 
@@ -89,6 +91,7 @@ export default function createCSPMiddleware(options?: CSPOptions) {
         baseUri: ["'none'"],
         defaultSrc,
         styleSrc,
+        fontSrc,
         scriptSrc: [
           ...uniq(scriptSrc),
           ...(options?.extraScriptSrc ?? []),

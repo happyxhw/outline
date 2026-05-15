@@ -24,6 +24,7 @@ import CodeFence from "./CodeFence";
 import Doc from "./Doc";
 import Embed from "./Embed";
 import Emoji from "./Emoji";
+import Excalidraw from "./Excalidraw";
 import HardBreak from "./HardBreak";
 import Heading from "./Heading";
 import HorizontalRule from "./HorizontalRule";
@@ -32,6 +33,7 @@ import ListItem from "./ListItem";
 import Math from "./Math";
 import MathBlock from "./MathBlock";
 import Mention from "./Mention";
+import Mindmap from "./Mindmap";
 import Notice from "./Notice";
 import OrderedList from "./OrderedList";
 import Paragraph from "./Paragraph";
@@ -105,6 +107,8 @@ export const richExtensions: Nodes = [
   CodeBlock,
   CodeFence,
   Blockquote,
+  Excalidraw,
+  Mindmap,
   Embed,
   Attachment,
   Video,
