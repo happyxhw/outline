@@ -49,6 +49,7 @@ export default function createCSPMiddleware(options?: CSPOptions) {
   const defaultSrc: string[] = ["'self'"];
   const scriptSrc: string[] = [];
   const styleSrc: string[] = ["'self'", "'unsafe-inline'"];
+  const fontSrc: string[] = ["'self'", "data:", "https://esm.sh"];
   const objectSrc: string[] = [env.URL, "'self'"];
 
   if (env.isCloudHosted) {
@@ -73,6 +74,7 @@ export default function createCSPMiddleware(options?: CSPOptions) {
   if (env.CDN_URL) {
     scriptSrc.push(env.CDN_URL);
     styleSrc.push(env.CDN_URL);
+    fontSrc.push(env.CDN_URL);
     defaultSrc.push(env.CDN_URL);
   }
 
@@ -84,31 +86,27 @@ export default function createCSPMiddleware(options?: CSPOptions) {
   return function cspMiddleware(ctx: Context, next: Next) {
     ctx.state.cspNonce = crypto.randomBytes(16).toString("hex");
 
-    // Note: workerSrc is included even though it's missing from the koa-helmet
-    // type definitions — the underlying helmet supports it. The service worker
-    // is served from the same origin as the document, which may be a custom
-    // domain that is not present in scriptSrc.
-    const directives = {
-      baseUri: ["'none'"],
-      defaultSrc,
-      styleSrc,
-      scriptSrc: [
-        ...uniq(scriptSrc),
-        ...(options?.extraScriptSrc ?? []),
-        env.DEVELOPMENT_UNSAFE_INLINE_CSP
-          ? "'unsafe-inline'"
-          : `'nonce-${ctx.state.cspNonce}'`,
-      ],
-      mediaSrc: ["*", "data:", "blob:"],
-      imgSrc: ["*", "data:", "blob:"],
-      frameSrc: ["*", "data:"],
-      workerSrc: ["'self'"],
-      objectSrc,
-      // Do not use connect-src: because self + websockets does not work in
-      // Safari, ref: https://bugs.webkit.org/show_bug.cgi?id=201591
-      connectSrc: ["*"],
-    };
-
-    return contentSecurityPolicy({ directives })(ctx, next);
+    return contentSecurityPolicy({
+      directives: {
+        baseUri: ["'none'"],
+        defaultSrc,
+        styleSrc,
+        fontSrc,
+        scriptSrc: [
+          ...uniq(scriptSrc),
+          ...(options?.extraScriptSrc ?? []),
+          env.DEVELOPMENT_UNSAFE_INLINE_CSP
+            ? "'unsafe-inline'"
+            : `'nonce-${ctx.state.cspNonce}'`,
+        ],
+        mediaSrc: ["*", "data:", "blob:"],
+        imgSrc: ["*", "data:", "blob:"],
+        frameSrc: ["*", "data:"],
+        objectSrc,
+        // Do not use connect-src: because self + websockets does not work in
+        // Safari, ref: https://bugs.webkit.org/show_bug.cgi?id=201591
+        connectSrc: ["*"],
+      },
+    })(ctx, next);
   };
 }
